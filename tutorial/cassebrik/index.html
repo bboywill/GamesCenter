@@ -1,15 +1,74 @@
-<!DOCTYPE html> 
-
-<html lang="fr">
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js"><!--<![endif]-->
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>CasseBrik Tutorial</title>
-	<link rel="stylesheet" href="css/common-large.css" media="screen" />
-	<script type="text/javascript" src="js/game.js"></script>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/main.css">
+	<script src="js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>
 </head>
 <body>
-	<h1>CasseBrik Tutorial</h1>
-	<div id="wrapper">
-		<canvas id="game" width="400" height="300">canvas doesn't work in your browser.. sorry!</canvas>
+	<!--[if lt IE 7]>
+		<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+	<![endif]-->
+	<div class="header-container">
+		<header class="wrapper clearfix">
+			<a href="/" class="logo">GamesCenter</a>
+			<nav>
+				<ul>
+					<li><a href="#">Games</a></li>
+					<li><a href="#">Account</a></li>
+					<li><a href="#">Contact</a></li>
+				</ul>
+			</nav>
+		</header>
 	</div>
+	<div class="main-container">
+		<div class="main wrapper clearfix">
+			<article>
+				<header>
+					<h1>CasseBrik</h1>
+					<p>Premier n&eacute; des jeux vid&eacute;os de Maxime et William... enjoy ;-)</p>
+				</header>
+				<section>
+					<canvas id="game" width="800" height="600">
+						This game won't work in your browser.. sorry! Try another, recent, one :-)
+					</canvas>
+				</section>
+				<section>
+					TODO: liens vers social network
+				</section>
+				<section>
+					TODO: Mise en place des commentaires
+				</section>
+			</article>
+			<aside>
+				<h2>Comment jouer ?</h2>
+				<p>TODO: r&ecirc;gles du jeu</p>
+			</aside>
+		</div>
+	</div>
+	<div class="footer-container">
+		<footer class="wrapper">Powered by LadezProd</footer>
+	</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="lib/jquery-1.8.2.min.js"><\/script>')</script>
+	<script src="js/plugins.js"></script>
+	<script src="js/game.js"></script>
+<!--
+	<script>
+		var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+		(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+		g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+		s.parentNode.insertBefore(g,s)}(document,'script'));
+	</script>
+-->
 </body>
 </html>
