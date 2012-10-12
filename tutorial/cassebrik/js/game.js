@@ -31,19 +31,11 @@
 			game.launch();
 			
 			// Gestion des évènements
-			window.document.onkeydown = function(e) {
-				if (e.keyCode == 39) {
-					// Flêche de droite
-					if ((bar.x + bar.move + bar.width) <= game.width) {
-						bar.x += bar.move;
-					}
-				} else if (e.keyCode == 37) {
-					// Flêche de gauche
-					if ((bar.x - bar.move) >= 0) {
-						bar.x -= bar.move;
-					}
-				}
-			};
+			keypress.combo("left", game.leftMove);
+			keypress.combo("right", game.rightMove);
+			keypress.sequence_combo("up up down down left right left right b a", function() {
+			    alert("konami code activated");
+			}, true);
 		});
 	});
 })(jQuery);
@@ -94,6 +86,12 @@ function createBar(ctx, x, y, width, height, move, color) {
 		ctx.fillStyle = bar.color;
 		ctx.fillRect(bar.x, bar.y, bar.width, bar.height);
 	};
+	bar.leftMove = function() {
+		bar.x -= bar.move;
+	}
+	bar.rightMove = function() {
+		bar.x += bar.move;
+	}
 	return bar;
 }
 
@@ -122,6 +120,20 @@ function createMotor(ctx, wall, bar, width, height, interval) {
 		if(game.timer != null) {
 			clearInterval(game.timer);
 		}
+	};
+	game.leftMove = function() {
+		if ((game.bar.x - game.bar.move) >= 0) {
+			game.bar.leftMove();
+			return true;
+		}
+		return false;
+	};
+	game.rightMove = function() {
+		if ((game.bar.x + game.bar.move + game.bar.width) <= game.width) {
+			game.bar.rightMove();
+			return true;
+		}
+		return false;
 	};
 	return game;
 }
