@@ -21,13 +21,29 @@
 			var barHeight = 20;
 			var barX = (this.width / 2) - (barWidth / 2);
 			var barY = (this.height - barHeight);
+			var barMove = 15;
 			var barColor = "#333333";
-			var bar = createBar(context, barX, barY, barWidth, barHeight, barColor);
+			var bar = createBar(context, barX, barY, barWidth, barHeight, barMove, barColor);
 			
 			// Initialisation du moteur
 			var interval = 10;
 			var game = createMotor(context, wall, bar, this.width, this.height, interval);
 			game.launch();
+			
+			// Gestion des évènements
+			window.document.onkeydown = function(e) {
+				if (e.keyCode == 39) {
+					// Flêche de droite
+					if ((bar.x + bar.move + bar.width) <= game.width) {
+						bar.x += bar.move;
+					}
+				} else if (e.keyCode == 37) {
+					// Flêche de gauche
+					if ((bar.x - bar.move) >= 0) {
+						bar.x -= bar.move;
+					}
+				}
+			};
 		});
 	});
 })(jQuery);
@@ -66,13 +82,14 @@ function createWall(ctx, numberOfLines, bricksPerLine, width, height, space, col
 	return wall;
 }
 
-function createBar(ctx, x, y, width, height, color) {
+function createBar(ctx, x, y, width, height, move, color) {
 	var bar = new Object();
 	bar.x = x;
 	bar.y = y;
 	bar.width = width;
 	bar.height = height;
 	bar.color = color;
+	bar.move = move;
 	bar.show = function(ctx) {
 		ctx.fillStyle = bar.color;
 		ctx.fillRect(bar.x, bar.y, bar.width, bar.height);
@@ -91,7 +108,7 @@ function createMotor(ctx, wall, bar, width, height, interval) {
 	game.timer = null;
 	game.launch = function() {
 		wall.reset();
-		game.timer = setTimeout(game.refresh, game.interval);
+		game.timer = setInterval(game.refresh, game.interval);
 	}
 	game.refresh = function() {
 		ctx.save();
@@ -103,7 +120,7 @@ function createMotor(ctx, wall, bar, width, height, interval) {
 	};
 	game.end = function() {
 		if(game.timer != null) {
-			clearTimeout(game.timer);
+			clearInterval(game.timer);
 		}
 	};
 	return game;
