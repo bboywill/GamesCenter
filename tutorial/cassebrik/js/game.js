@@ -1,139 +1,114 @@
-(function($) {
-	$(document).ready(function() {
-		var elem = $("#game").each(function() {
-			// Initialisation du contexte 2D
-			var context = this.getContext("2d");
-			if (!context) {
-				return;
-			}
-			
-			// Initialisation du mur
-			var numberOfLines = 4;
-			var brickPerLine = 10;
-			var brickWidth = 78;
-			var brickHeight = 30;
-			var brickSpace = 2;
-			var brickColors = ["#503A22", "#88502F", "#A17048", "#D9C38A", "#F7DDAC"];
-			var wall = createWall(context, numberOfLines, brickPerLine, brickWidth, brickHeight, brickSpace, brickColors);
-			
-			// Initialisation de la barre
-			var barWidth = 160;
-			var barHeight = 20;
-			var barX = (this.width / 2) - (barWidth / 2);
-			var barY = (this.height - barHeight);
-			var barMove = 15;
-			var barColor = "#333333";
-			var bar = createBar(context, barX, barY, barWidth, barHeight, barMove, barColor);
-			
-			// Initialisation du moteur
-			var interval = 10;
-			var game = createMotor(context, wall, bar, this.width, this.height, interval);
-			game.launch();
-			
-			// Gestion des évènements
-			keypress.combo("left", game.leftMove);
-			keypress.combo("right", game.rightMove);
-			keypress.sequence_combo("up up down down left right left right b a", function() {
-			    alert("konami code activated");
-			}, true);
-		});
-	});
-})(jQuery);
+this.cassebrik = this.cassebrik || {};
 
-function createWall(ctx, numberOfLines, bricksPerLine, width, height, space, colors) {
-	var wall = new Object()
-	wall.numberOfLines = numberOfLines;
-	wall.bricksPerLine = bricksPerLine;
-	wall.brick = new Object();
-	wall.brick.width = width;
-	wall.brick.height = height;
-	wall.brick.space = space;
-	wall.colors = colors;
-	wall.bricks = new Array(numberOfLines);
-	wall.reset = function() {
-		for (var i = 0; i < wall.numberOfLines; i++) {
-			wall.bricks[i] = new Array(wall.bricksPerLine);
-			for (var j = 0; j < wall.bricksPerLine; j++) {
-				wall.bricks[i][j] = 1;
+cassebrik.Wall = function(numberOfLines, bricksPerLine, width, height, space, colors) {
+	this.numberOfLines = numberOfLines;
+	this.bricksPerLine = bricksPerLine;
+	this.brick = new Object();
+	this.brick.width = width;
+	this.brick.height = height;
+	this.brick.space = space;
+	this.colors = colors;
+	this.bricks = new Array(numberOfLines);
+};
+
+cassebrik.Wall.prototype = {
+	reset : function() {
+		for (var i = 0; i < this.numberOfLines; i++) {
+			this.bricks[i] = new Array(this.bricksPerLine);
+			for (var j = 0; j < this.bricksPerLine; j++) {
+				this.bricks[i][j] = 1;
 			}
 		}
-	};
-	wall.show = function(ctx) {
-		var width = wall.brick.width;
-		var height = wall.brick.height;
-		var space = wall.brick.space;
-		for (var i = 0; i < wall.numberOfLines; i++) {
-			ctx.fillStyle = wall.colors[i];
-			for (var j = 0; j < wall.bricksPerLine; j++) {
-				if(wall.bricks[i][j] == 1) {
+	},
+	show : function(ctx) {
+		var width = this.brick.width;
+		var height = this.brick.height;
+		var space = this.brick.space;
+		for (var i = 0; i < this.numberOfLines; i++) {
+			ctx.fillStyle = this.colors[i];
+			for (var j = 0; j < this.bricksPerLine; j++) {
+				if(this.bricks[i][j] == 1) {
 					ctx.fillRect((j * (width + space)), (i * (height + space)), width, height);
 				}
 			}
 		}
-	};
-	return wall;
-}
+	}
+};
 
-function createBar(ctx, x, y, width, height, move, color) {
-	var bar = new Object();
-	bar.x = x;
-	bar.y = y;
-	bar.width = width;
-	bar.height = height;
-	bar.color = color;
-	bar.move = move;
-	bar.show = function(ctx) {
-		ctx.fillStyle = bar.color;
-		ctx.fillRect(bar.x, bar.y, bar.width, bar.height);
-	};
-	bar.leftMove = function() {
-		bar.x -= bar.move;
-	}
-	bar.rightMove = function() {
-		bar.x += bar.move;
-	}
-	return bar;
-}
+cassebrik.Bar = function(x, y, width, height, move, color) {
+	this.x = x;
+	this.width = width;
+	this.height = height;
+	this.color = color;
+	this.move = move;
+};
 
-function createMotor(ctx, wall, bar, width, height, interval) {
-	var game = new Object();
-	game.context = ctx;
-	game.wall = wall;
-	game.bar = bar;
-	game.width = width;
-	game.height = height;
-	game.interval = interval;
-	game.timer = null;
-	game.launch = function() {
-		wall.reset();
-		game.timer = setInterval(game.refresh, game.interval);
+cassebrik.Bar.prototype = { 
+	show : function(ctx) {
+		ctx.fillStyle = this.color;
+		ctx.fillRect(this.x, this.y, this.width, this.height);
+	},
+	leftMove : function() {
+		this.x -= this.move;
+	},
+	rightMove : function() {
+		this.x += this.move;
 	}
-	game.refresh = function() {
-		ctx.save();
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
-		ctx.clearRect(0, 0, game.width, game.height);
-		ctx.restore();
-		game.wall.show(game.context);
-		game.bar.show(game.context);
-	};
-	game.end = function() {
-		if(game.timer != null) {
-			clearInterval(game.timer);
+};
+
+cassebrik.Game = function(ctx, wall, bar, width, height, interval) {
+	this.context = ctx;
+	this.wall = wall;
+	this.bar = bar;
+	this.width = width;
+	this.height = height;
+	this.interval = interval;
+	this.timer = null;
+};
+
+cassebrik.Game.prototype = {
+	launch : function() {
+		this.wall.reset();
+		var game = this;
+		this.timer = setInterval(function() {
+			game.refresh();
+		}, this.interval);
+	},
+	refresh : function() {
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		this.context.clearRect(0, 0, game.width, game.height);
+		this.context.restore();
+		this.wall.show(this.context);
+		this.bar.show(this.context);
+	},
+	end : function() {
+		if(this.timer != null) {
+			clearInterval(this.timer);
 		}
-	};
-	game.leftMove = function() {
-		if ((game.bar.x - game.bar.move) >= 0) {
-			game.bar.leftMove();
-			return true;
+	},
+	execute : function(action) {
+		if(!(typeof this.actions[action] === 'undefined')) {
+			this.actions[action]();
 		}
-		return false;
-	};
-	game.rightMove = function() {
-		if ((game.bar.x + game.bar.move + game.bar.width) <= game.width) {
-			game.bar.rightMove();
-			return true;
+	},
+	actions : {
+		"left_movement": function() {
+			if ((this.bar.x - this.bar.move) >= 0) {
+				this.bar.leftMove();
+				return true;
+			}
+			return false;
+		},
+		"right_movement": function() {
+			if ((this.bar.x + this.bar.move + this.bar.width) <= this.width) {
+				this.bar.rightMove();
+				return true;
+			}
+			return false;
+		},
+		"konami_code": function() {
+			alert("konami code executed");
 		}
-		return false;
-	};
-	return game;
-}
+	}
+};
