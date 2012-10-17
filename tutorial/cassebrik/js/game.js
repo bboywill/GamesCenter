@@ -37,6 +37,7 @@ cassebrik.Wall.prototype = {
 
 cassebrik.Bar = function(x, y, width, height, move, color) {
 	this.x = x;
+	this.y = y;
 	this.width = width;
 	this.height = height;
 	this.color = color;
@@ -89,7 +90,7 @@ cassebrik.Game.prototype = {
 	},
 	execute : function(action) {
 		if(!(typeof this.actions[action] === 'undefined')) {
-			this.actions[action]();
+			this.actions[action].apply(this);
 		}
 	},
 	actions : {
