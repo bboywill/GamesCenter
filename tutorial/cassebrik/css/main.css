@@ -162,13 +162,13 @@ nav a:hover {
     width:100%;
 }
 
-.logo {
+.title {
     font-size:2em;
     margin:0.67em 0;
-    float:left;
     text-decoration:none;
     font-weight:bold;
     color:white;
+    display: block;
 }
 
 
