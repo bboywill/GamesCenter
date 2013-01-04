@@ -9,7 +9,7 @@ cassebrik.Wall = function(numberOfLines, bricksPerLine, width, height, space, co
 	this.brick.space = space;
 	this.colors = colors;
 	this.bricks = new Array(numberOfLines);
-	this.empty = true;
+	this.remainedBricks = numberOfLines * bricksPerLine;
 };
 
 cassebrik.Wall.prototype = {
@@ -20,7 +20,7 @@ cassebrik.Wall.prototype = {
 				this.bricks[i][j] = 1;
 			}
 		}
-		this.empty = false;
+		this.remainedBricks = this.numberOfLines * this.bricksPerLine;
 	},
 	show : function(ctx) {
 		var width = this.brick.width;

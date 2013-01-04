@@ -46,8 +46,9 @@ cassebrik.Ball.prototype = {
 			if(lineX >= game.wall.bricksPerLine) lineX = game.wall.bricksPerLine - 1;
 			if(lineY < 0) lineY = 0;
 			if(lineY >= game.wall.numberOfLines) lineY = game.wall.numberOfLines - 1;
-			if (game.wall.bricks[lineY - 1][lineX] == 1) {
-				game.wall.bricks[lineY - 1][lineX] = 0;
+			if (game.wall.bricks[lineY][lineX] == 1) {
+				game.wall.bricks[lineY][lineX] = 0;
+				game.wall.remainedBricks = game.wall.remainedBricks - 1;
 				this.moveY = 0 - this.moveY;
 			}
 		}

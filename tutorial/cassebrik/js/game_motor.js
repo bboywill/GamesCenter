@@ -13,22 +13,20 @@ cassebrik.Game = function(ctx, wall, bar, ball, width, height, interval) {
 	this.height = height;
 	this.interval = interval;
 	this.timer = null;
+	this.paused = true;
 };
 
 cassebrik.Game.prototype = {
 	launch : function() {
 		console.log("demarrage");
 		this.wall.reset();
-		var game = this;
-		this.timer = setInterval(function() {
-			game.refresh();
-		}, this.interval);
+		this.play();
 	},
 	refresh : function() {
-		this.context.save();
-		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		//this.context.save();
+		//this.context.setTransform(1, 0, 0, 1, 0, 0);
 		this.context.clearRect(0, 0, this.width, this.height);
-		this.context.restore();
+		//this.context.restore();
 		
 		this.ball.refresh(this);
 		
@@ -36,12 +34,22 @@ cassebrik.Game.prototype = {
 		this.ball.show(this.context);
 		this.bar.show(this.context);
 		
-		if(this.wall.empty) {
+		if(this.wall.remainedBricks == 0) {
 			this.execute("win");
 		}
 	},
-	end : function() {
-		if(this.timer != null) {
+	play : function() {
+		if(this.paused) {
+			this.paused = false;
+			var game = this;
+			this.timer = setInterval(function() {
+				game.refresh();
+			}, this.interval);
+		}
+	},
+	pause : function() {
+		if(!this.paused) {
+			this.paused = true;
 			clearInterval(this.timer);
 		}
 	},
@@ -63,14 +71,21 @@ cassebrik.Game.prototype = {
 			return true;
 		},
 		"lose": function() {
-			this.end();
+			this.pause();
 			alert("loser");
 			return true;
 		},
 		"win": function() {
-			this.end();
+			this.pause();
 			alert("winner");
 			return true;
+		},
+		"play_pause": function() {
+			if(this.paused) {
+				this.play();
+			} else {
+				this.pause();
+			}
 		}
 	}
 };

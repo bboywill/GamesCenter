@@ -15,17 +15,19 @@ cassebrik.Bar.prototype = {
 		ctx.fillRect(this.x, this.y, this.width, this.height);
 	},
 	leftMove : function() {
-		if ((this.x - this.move) >= 0) {
-			this.x -= this.move;
-			return true;
+		this.x -= this.move;
+		if ((this.x - this.move) < 0) {
+			this.x = 0;
+			return false;
 		}
-		return false;
+		return true;
 	},
 	rightMove : function(game) {
-		if ((this.x + this.move + this.width) <= game.width) {
-			this.x += this.move;
-			return true;
+		this.x += this.move;
+		if ((this.x + this.move + this.width) > game.width) {
+			this.x = game.width - this.width;
+			return false;
 		}
-		return false;
+		return true;
 	}
 };
