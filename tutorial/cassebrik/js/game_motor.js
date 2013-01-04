@@ -20,20 +20,15 @@ cassebrik.Game.prototype = {
 	launch : function() {
 		console.log("demarrage");
 		this.wall.reset();
-		this.play();
+		this.refresh();
+		this.showMessage("Press p to start");
 	},
 	refresh : function() {
-		//this.context.save();
-		//this.context.setTransform(1, 0, 0, 1, 0, 0);
 		this.context.clearRect(0, 0, this.width, this.height);
-		//this.context.restore();
-		
 		this.ball.refresh(this);
-		
 		this.wall.show(this.context);
 		this.ball.show(this.context);
 		this.bar.show(this.context);
-		
 		if(this.wall.remainedBricks == 0) {
 			this.execute("win");
 		}
@@ -51,7 +46,11 @@ cassebrik.Game.prototype = {
 		if(!this.paused) {
 			this.paused = true;
 			clearInterval(this.timer);
+			this.showMessage("Pause - press p to continue");
 		}
+	},
+	showMessage : function(msg) {
+		alert(msg);
 	},
 	execute : function(action) {
 		if(!(typeof this.actions[action] === 'undefined')) {

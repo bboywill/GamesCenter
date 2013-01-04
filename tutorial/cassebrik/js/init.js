@@ -56,6 +56,9 @@
 			keypress.combo("right", function() {
 				game.execute("right_movement");
 			});
+			keypress.combo("p", function() {
+				game.execute("play_pause");
+			});
 			keypress.sequence_combo("up up down down left right left right b a", function() {
 				game.execute("konami_code");
 			}, true);
